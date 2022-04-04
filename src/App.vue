@@ -11,6 +11,7 @@
 
 <script>
 import Headers from './components/header/index.vue'
+
 export default {
   components: {
     Headers
