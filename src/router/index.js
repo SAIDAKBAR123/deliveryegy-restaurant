@@ -11,15 +11,15 @@ const routes = [
     component: Home
   },
   {
-    path: '/restaurant',
-    name: 'Restaurant',
-    component: () => import('../views/restaurant/index.vue')
-  },
-  {
     path: '/product/:id',
-    name: 'product-id',
-    component: () => import('../views/products/index.vue')
+    name: 'Product-definition',
+    component: () => import('../views/home/components/Definition.vue')
   }
+  // {
+  //   path: '/product/:id',
+  //   name: 'product-id',
+  //   component: () => import('../views/products/index.vue')
+  // }
 ]
 
 const router = new VueRouter({

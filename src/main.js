@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import '../src/global.scss'
+import Card from './views/home/components/Card.vue'
 
+Vue.component('status-card', Card)
 Vue.config.productionTip = false
 
 new Vue({

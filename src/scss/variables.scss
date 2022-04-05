@@ -1,0 +1,13 @@
+
+$tab-font-size: 12px;
+@font-face {
+    font-family: 'MyWebFont';
+    src: url('../assets/font_sf_pro.ttf') format('ttf') /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */  } 
+$font-family:'MyWebFont';
+.v-application {
+  [class*='text-'] {
+    color: #36405a;
+    font-family: $font-family, sans-serif !important;
+  }
+  font-family: $font-family, sans-serif !important;
+}
