@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat color="#22B573" class="pa-2" tile>
-      <v-btn fab text small><v-icon>mdi-chevron-left</v-icon></v-btn>
+      <v-btn fab text small @click="$router.go(-1)"><v-icon>mdi-chevron-left</v-icon></v-btn>
       <v-card-title>Заказ №134231</v-card-title>
     </v-card>
     <!-- Courier list -->
@@ -48,18 +48,47 @@
       <v-divider></v-divider>
       <v-card-actions>
           <v-row justify="space-between" >
-              <v-col cols="auto"><span class="body text-bold">Общая сумма:</span></v-col>
-              <v-col cols="auto"><span class="body">57 000 сум</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">Общая сумма:</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">57 000 сум</span></v-col>
           </v-row>
       </v-card-actions>
     </v-card>
     <!-- Product comment -->
-    <v-card class="my-2 px-4" tile flat> hello list </v-card>
+    <v-card class="my-2 px-4" tile flat>
+      <v-card-title class="pa-2 font-weight-bold">Комментария к заказу</v-card-title>
+      <v-divider></v-divider>
+      <v-card-subtitle>Пожалуйста, не забудьте добавить салфетку</v-card-subtitle>
+    </v-card>
+    <!-- Card footer -->
+    <v-footer height="72" fixed v-if="statusOfOrder.text">
+      <v-row justify="center">
+        <v-col cols="12">
+          <v-btn elevation="0" to="/zakaz" dark :color="statusOfOrder.color" v-text="statusOfOrder.text" block large class="text-capitalize" rounded>
+            <v-icon></v-icon>
+           </v-btn>
+        </v-col>
+      </v-row>
+    </v-footer>
   </div>
 </template>
 
 <script>
 export default {
+  props: [''],
+  computed: {
+    statusOfOrder () {
+      switch (this.$route.query.status) {
+        case 'newOrder':
+          return { text: 'Принять заказ', color: 'orange darken-1' }
+        case 'proccess':
+          return { text: 'Готово', color: '#22B573' }
+        case 'finished':
+          return { text: '', color: '' }
+        default:
+          return { text: 'Принять заказ', color: 'orange darken-1' }
+      }
+    }
+  },
   data () {
     return {
       recent: [
@@ -77,6 +106,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    console.log(this.$route.query.status)
   }
 }
 </script>

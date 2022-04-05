@@ -1,7 +1,7 @@
 <template>
  <v-app id="inspire">
 
-  <v-app-bar v-if="false" app>
+  <v-app-bar app v-if="false">
     <v-app-bar
       absolute
       color="white"
@@ -28,17 +28,15 @@
   </v-app-bar>
 
   <!-- Sizes your content based upon application components -->
-  <v-main>
-
+  <v-main class="py-0 my-0">
     <!-- Provides the application the proper gutter -->
     <v-container fluid class="pa-0 overflow-hidden">
+      <transition name="component-fade" mode="out-in">
       <router-view></router-view>
+      </transition>
+
     </v-container>
   </v-main>
-
-  <v-footer app>
-    <!-- -->
-  </v-footer>
 </v-app>
 </template>
 
@@ -55,6 +53,7 @@ export default {
 </script>
 <style scoped>
 #inspire {
+  padding: 0px !important;
   background: #E5E5E5;
 }
 .trueClass {
@@ -73,5 +72,13 @@ export default {
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to
+/* .component-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

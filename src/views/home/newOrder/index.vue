@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <status-card v-for="item in 15" :key="item" status="newOrder"/>
+      <status-card v-for="item in 15" :key="item" :query="$route.query" status="newOrder"/>
       <template v-if="false">
         <svg
           width="78"
@@ -41,23 +41,19 @@
         </svg>
       </template>
     </div>
-    <v-footer height="62" fixed>
-      <v-row justify="center text-capitalize">
-        <v-col cols="auto">
-          <v-btn text to="/zakaz" class="text-capitalize"> Мои заказы </v-btn>
-        </v-col>
-        <v-col cols="auto">
-          <v-btn text to="/restaurants" class="text-capitalize">
-            Ресторан
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-footer>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  created () {
+    this.$router.replace({
+      query: {
+        status: 'newOrder'
+      }
+    }).catch(er => {})
+  }
+}
 </script>
 
 <style>
