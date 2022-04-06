@@ -1,4 +1,4 @@
-# udevs_bot_manager_admin
+# Deliveryegy restaurant
 
 ## Project setup
 ```
