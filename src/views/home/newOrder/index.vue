@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <status-card v-for="item in 15" :key="item" :query="$route.query" status="newOrder"/>
+      <status-card v-for="item in orders" :key="item.guid" :element="item" :query="$route.query" status="orders"/>
       <template v-if="false">
         <svg
           width="78"
@@ -46,10 +46,11 @@
 
 <script>
 export default {
+  props: ['orders'],
   created () {
     this.$router.replace({
       query: {
-        status: 'newOrder'
+        status: 'new'
       }
     }).catch(er => {})
   }

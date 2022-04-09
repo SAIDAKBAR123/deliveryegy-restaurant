@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <status-card v-for="item in 15" :key="item" :element="{}" :query="$route.query" status="process"/>
+      <status-card v-for="item in orders" :key="item.guid" :element="item" :query="$route.query" status="restaurant-proccess"/>
       <template v-if="false">
         <svg
           width="78"
@@ -45,7 +45,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['orders']
+}
 </script>
 
 <style>

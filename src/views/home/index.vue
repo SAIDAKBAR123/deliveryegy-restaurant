@@ -1,25 +1,9 @@
 <template>
 <div>
-    <v-card color="white" flat tile style="width: 100vw">
+    <v-card flat tile style="width: 100vw">
       <v-row  class="mx-2 my-0" justify="space-between" align="center">
         <v-col cols="auto">
-          <span class="display-1">Мои заказы</span>
-        </v-col>
-        <v-col cols="auto">
-          <span
-            ><svg
-              width="14"
-              height="15"
-              viewBox="0 0 14 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 6.5V0.5H8V6.5H14V8.5H8V14.5H6V8.5H0V6.5H6Z"
-                fill="black"
-              />
-            </svg>
-          </span>
+          <span class="display-1">Restaurant</span>
         </v-col>
       </v-row>
       <v-row justify="center" align="center" style="margin: 0.4px 0px">
@@ -29,16 +13,16 @@
             background-color="#efeff4"
             v-model="tab"
             hide-slider
-            slider-color="green"
+            slider-color="black"
             fixed-tabs
             class="tab_card"
           >
-            <v-tab key="newOrder" active-class="colorDone"
+            <v-tab key="orders" active-class="colorDone"
 >
-              <v-badge color="green" content="12"> Новый </v-badge>
+              <v-badge color="green" :content="newOrders.length"> New orders </v-badge>
             </v-tab>
-            <v-tab key="proccess" active-class="colorDone">В процессе</v-tab>
-            <v-tab key="finished" active-class="colorDone">Готов</v-tab>
+            <v-tab key="proccess" active-class="colorDone">On Process</v-tab>
+            <v-tab key="finished" active-class="colorDone">Ready</v-tab>
           </v-tabs>
         </v-col>
       </v-row>
@@ -46,13 +30,13 @@
     <v-card class="mt-4" flat tile color="transparent">
       <v-tabs-items v-model="tab" background-color="transparent" >
             <v-tab-item active-class="colorDone" style="background-color: #E5E5E5 !important">
-              <New />
+                <New :orders="newOrders"/>
             </v-tab-item>
             <v-tab-item style="background-color: #E5E5E5 !important">
-                <Process />
+                <Process :orders="restaurantProccess"/>
             </v-tab-item>
             <v-tab-item style="background-color: #E5E5E5 !important">
-                <Finish />
+                <Finish :orders="restaurantReady" />
             </v-tab-item>
           </v-tabs-items>
     </v-card>
@@ -63,10 +47,14 @@
 import Finish from './finishedOrder'
 import New from './newOrder'
 import Process from './processOrder'
+import Vendor from '../../services/vendor'
 export default {
   data () {
     return {
-      tab: 'newOrder'
+      tab: 'new',
+      restaurantProccess: [],
+      restaurantReady: [],
+      newOrders: []
     }
   },
   watch: {
@@ -77,21 +65,21 @@ export default {
         case 0:
           this.$router.replace({
             query: {
-              status: 'newOrder'
+              status: 'new'
             }
           }).catch(er => {})
           break
         case 1:
           this.$router.replace({
             query: {
-              status: 'proccess'
+              status: 'restaurant-proccess'
             }
           }).catch(er => {})
           break
         case 2:
           this.$router.replace({
             query: {
-              status: 'finished'
+              status: 'restaurant-ready'
             }
           }).catch(er => {})
           break
@@ -101,9 +89,20 @@ export default {
       }
     }
   },
+  methods: {
+    getOrders () {
+      Vendor.getOrderList().then(res => {
+        console.log(res)
+        this.newOrders = res.orders.filter(el => el.status === 'new')
+        this.restaurantProccess = res.orders.filter(el => el.status === 'restaurant-proccess')
+        this.restaurantReady = res.orders.filter(el => el.status === 'restaurant-ready')
+      })
+    }
+  },
   components: { Finish, New, Process },
   created () {
-    this.tab = this.$route.query.status ? this.$route.query.status : 'newOrder'
+    this.tab = this.$route.query.status ? this.$route.query.status : 'new'
+    this.getOrders()
   }
 }
 </script>

@@ -1,19 +1,13 @@
 <template>
   <div>
-    <v-card class="mb-2" color="white" style="border: 1px solid red" tile flat @click="$router.push({
-      path: '/product/34',
+    <v-card  class="mb-2" height="130" color="white" style="border: 1px solid red" tile flat @click="$router.push({
+      path: '/product/' + element.guid,
       query
     })">
       <v-card-title class="text-h5 pa-2">
             <v-row justify="space-between" align="center">
                 <v-col cols="auto">
-                    Заказ №134232
-                </v-col>
-                <v-col v-if="status !== 'newOrder'" cols="auto">
-                    <v-chip color="red lighten-4">
-                        <v-icon left color="red">mdi-clock-time-three-outline</v-icon>
-                        <span class="red--text">09:21</span>
-                    </v-chip>
+                    Order <strong>{{ element.guid.substring(0, 6) }}</strong>
                 </v-col>
             </v-row>
         </v-card-title>
@@ -22,7 +16,7 @@
         <v-row>
           <v-col cols="auto">
             <v-btn text class="text-capitalize">
-              <v-icon left size="24" color="green">mdi-bike</v-icon> Доставка
+              <v-icon left size="24" color="green">mdi-bike</v-icon> Delivery
             </v-btn>
           </v-col>
           <v-col cols="auto">
@@ -30,7 +24,7 @@
           </v-col>
           <v-col cols="auto">
             <v-btn text>
-              <v-icon left size="24" color="green">mdi-cash</v-icon> 160 000 сум
+              <v-icon left size="24" color="green">mdi-cash</v-icon> {{ element.price }} uzs
             </v-btn>
           </v-col>
         </v-row>
@@ -41,7 +35,7 @@
 
 <script>
 export default {
-  props: ['status', 'query']
+  props: ['status', 'query', 'element']
 }
 </script>
 

@@ -34,15 +34,17 @@
       <transition name="component-fade" mode="out-in">
       <router-view></router-view>
       </transition>
-
+      <Login />
     </v-container>
   </v-main>
 </v-app>
 </template>
 
 <script>
+import Login from './views/login'
 export default {
   components: {
+    Login
   },
   data: () => ({
   }),
@@ -71,11 +73,11 @@ export default {
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(10px);
 }
 
 .component-fade-enter-active, .component-fade-leave-active {
-  transition: opacity .3s ease;
+  transition: opacity .2s ease;
 }
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active below version 2.1.8 */ {

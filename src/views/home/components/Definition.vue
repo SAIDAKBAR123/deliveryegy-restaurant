@@ -2,7 +2,7 @@
   <div>
     <v-card flat color="#22B573" class="pa-2" tile>
       <v-btn fab text small @click="$router.go(-1)"><v-icon>mdi-chevron-left</v-icon></v-btn>
-      <v-card-title>Заказ №134231</v-card-title>
+      <v-card-title>Order №{{  order.guid.substring(0, 6) || ''}}</v-card-title>
     </v-card>
     <!-- Courier list -->
     <v-card height="72" class="my-2 px-4" tile flat>
@@ -31,7 +31,7 @@
     <!-- Product list -->
     <v-card class="my-2 px-4" tile flat>
       <v-list subheader>
-        <v-subheader>Продукты</v-subheader>
+        <v-subheader>Products</v-subheader>
 
         <v-list-item v-for="chat in recent" :key="chat.title">
 
@@ -48,22 +48,22 @@
       <v-divider></v-divider>
       <v-card-actions>
           <v-row justify="space-between" >
-              <v-col cols="auto"><span class="body font-weight-bold">Общая сумма:</span></v-col>
-              <v-col cols="auto"><span class="body font-weight-bold">57 000 сум</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">Total price:</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">57 000 uzs</span></v-col>
           </v-row>
       </v-card-actions>
     </v-card>
     <!-- Product comment -->
     <v-card class="my-2 px-4" tile flat>
-      <v-card-title class="pa-2 font-weight-bold">Комментария к заказу</v-card-title>
+      <v-card-title class="pa-2 font-weight-bold">Comments</v-card-title>
       <v-divider></v-divider>
-      <v-card-subtitle>Пожалуйста, не забудьте добавить салфетку</v-card-subtitle>
+      <v-card-subtitle>{{ order.comment }}</v-card-subtitle>
     </v-card>
     <!-- Card footer -->
     <v-footer height="72" fixed v-if="statusOfOrder.text">
       <v-row justify="center">
         <v-col cols="12">
-          <v-btn elevation="0" to="/zakaz" dark :color="statusOfOrder.color" v-text="statusOfOrder.text" block large class="text-capitalize" rounded>
+          <v-btn elevation="0" :loading="loading" dark @click="updateStatus()" :color="statusOfOrder.color" v-text="statusOfOrder.text" block large class="text-capitalize" rounded>
             <v-icon></v-icon>
            </v-btn>
         </v-col>
@@ -73,24 +73,26 @@
 </template>
 
 <script>
+import Vendor from '../../../services/vendor'
 export default {
-  props: [''],
   computed: {
     statusOfOrder () {
       switch (this.$route.query.status) {
-        case 'newOrder':
-          return { text: 'Принять заказ', color: 'orange darken-1' }
-        case 'proccess':
-          return { text: 'Готово', color: '#22B573' }
-        case 'finished':
+        case 'orders':
+          return { text: 'Accept order', color: 'orange darken-1' }
+        case 'restaurant-proccess':
+          return { text: 'Ready', color: '#22B573' }
+        case 'restaurant-ready':
           return { text: '', color: '' }
         default:
-          return { text: 'Принять заказ', color: 'orange darken-1' }
+          return { text: 'Accept order', color: 'orange darken-1' }
       }
     }
   },
   data () {
     return {
+      order: {},
+      loading: false,
       recent: [
         {
           active: true,
@@ -107,8 +109,54 @@ export default {
       ]
     }
   },
+  methods: {
+    getOrderById (id) {
+      Vendor.getOrderById(id).then(res => {
+        console.log(res)
+        this.order = res
+      })
+    },
+    updateStatus () {
+      this.loading = true
+      let status = this.$route.query.status
+      switch (this.$route.query.status) {
+        case 'new':
+          status = 'restaurant-proccess'
+          break
+        case 'restaurant-proccess':
+          status = 'restaurant-ready'
+          break
+        // case 'restaurant-ready':
+        //   status = 'courier-accepted'
+        //   break;
+        default:
+          status = 'restaurant-proccess'
+
+          break
+      }
+      Vendor.updateOrder({
+        ...this.order,
+        status
+      }).then(res => {
+        this.$router.replace({
+          query: {
+            status
+          }
+        })
+        this.order = {
+          ...this.order,
+          status
+        }
+        this.loading = false
+        alert('Successfully updated ')
+        console.log(this.order)
+      }).finally(() => {
+        this.loading = false
+      })
+    }
+  },
   created () {
-    console.log(this.$route.query.status)
+    this.getOrderById(this.$route.params.id)
   }
 }
 </script>
