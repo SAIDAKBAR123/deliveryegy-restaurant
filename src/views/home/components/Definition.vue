@@ -49,7 +49,7 @@
       <v-card-actions>
           <v-row justify="space-between" >
               <v-col cols="auto"><span class="body font-weight-bold">Total price:</span></v-col>
-              <v-col cols="auto"><span class="body font-weight-bold">57 000 uzs</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">{{ order.total_price }} uzs</span></v-col>
           </v-row>
       </v-card-actions>
     </v-card>

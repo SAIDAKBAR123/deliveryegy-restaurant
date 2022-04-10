@@ -1,9 +1,10 @@
 <template>
 <div>
-    <v-card flat tile style="width: 100vw">
+    <v-card flat tile style="width: 100vw" color="green lighten-2">
       <v-row  class="mx-2 my-0" justify="space-between" align="center">
         <v-col cols="auto">
           <span class="display-1">Restaurant</span>
+          <p class="title">{{ $store.state.user.name }}</p>
         </v-col>
       </v-row>
       <v-row justify="center" align="center" style="margin: 0.4px 0px">
@@ -40,6 +41,16 @@
             </v-tab-item>
           </v-tabs-items>
     </v-card>
+        <v-footer fixed>
+      <v-row justify="center">
+        <v-col cols="auto">
+          <v-btn elevation="0" class="px-0" to="/my-orders">My orders</v-btn>
+        </v-col>
+        <v-col cols="auto" class="px-0">
+          <v-btn elevation="0" color="red" dark rounded @click="leave">Leave</v-btn>
+        </v-col>
+      </v-row>
+    </v-footer>
   </div>
 </template>
 
@@ -90,6 +101,11 @@ export default {
     }
   },
   methods: {
+    leave () {
+      localStorage.removeItem('user')
+      this.$store.commit('REMOVE')
+      window.location.reload()
+    },
     getOrders () {
       Vendor.getOrderList().then(res => {
         console.log(res)
