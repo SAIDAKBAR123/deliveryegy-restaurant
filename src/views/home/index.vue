@@ -43,9 +43,9 @@
     </v-card>
         <v-footer fixed>
       <v-row justify="center">
-        <v-col cols="auto">
+        <!-- <v-col cols="auto">
           <v-btn elevation="0" class="px-0" to="/my-orders">My orders</v-btn>
-        </v-col>
+        </v-col> -->
         <v-col cols="auto" class="px-0">
           <v-btn elevation="0" color="red" dark rounded @click="leave">Leave</v-btn>
         </v-col>

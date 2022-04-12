@@ -2,7 +2,7 @@
   <div>
     <v-card flat color="#22B573" class="pa-2" tile>
       <v-btn fab text small @click="$router.go(-1)"><v-icon>mdi-chevron-left</v-icon></v-btn>
-      <v-card-title>Order №{{  order.guid.substring(0, 6) || ''}}</v-card-title>
+      <v-card-title v-if="order.guid">Order №{{  order.guid.substring(0, 6) || ''}}</v-card-title>
     </v-card>
     <!-- Courier list -->
     <v-card height="72" class="my-2 px-4" tile flat>
@@ -33,11 +33,11 @@
       <v-list subheader>
         <v-subheader>Products</v-subheader>
 
-        <v-list-item v-for="chat in recent" :key="chat.title">
+        <v-list-item v-for="(chat, i) in order.products" :key="chat.title">
 
           <v-list-item-content>
-            <v-list-item-title v-text="chat.title"></v-list-item-title>
-            <v-list-item-subtitle class="text--gray" v-text="chat.des"></v-list-item-subtitle>
+            <v-list-item-title v-text="i+1 + '. ' + chat.name"></v-list-item-title>
+            <!-- <v-list-item-subtitle class="text--gray" v-text="chat.des"></v-list-item-subtitle> -->
           </v-list-item-content>
 
           <v-list-item-icon>
@@ -49,7 +49,7 @@
       <v-card-actions>
           <v-row justify="space-between" >
               <v-col cols="auto"><span class="body font-weight-bold">Total price:</span></v-col>
-              <v-col cols="auto"><span class="body font-weight-bold">{{ order.total_price }} uzs</span></v-col>
+              <v-col cols="auto"><span class="body font-weight-bold">{{ orderPrice(order.products) }} uzs</span></v-col>
           </v-row>
       </v-card-actions>
     </v-card>
@@ -110,6 +110,12 @@ export default {
     }
   },
   methods: {
+    orderPrice (list = []) {
+      return list.reduce((acc, curr) => {
+        acc = acc + curr.price
+        return acc
+      }, 0)
+    },
     getOrderById (id) {
       Vendor.getOrderById(id).then(res => {
         console.log(res)
@@ -134,10 +140,19 @@ export default {
 
           break
       }
-      Vendor.updateOrder({
-        ...this.order,
-        status
-      }).then(res => {
+      console.log(this.order)
+      const formData = {
+        address: this.order.address,
+        branch_id: this.order.branch_id,
+        comment: this.order.comment,
+        delivery_type: this.order.delivery_type,
+        guid: this.order.guid,
+        payment_type: this.order.payment_type,
+        product_id: this.order.products.map(el => el.id),
+        status,
+        user_id: this.order.user_id
+      }
+      Vendor.updateOrder(formData).then(res => {
         this.$router.replace({
           query: {
             status
