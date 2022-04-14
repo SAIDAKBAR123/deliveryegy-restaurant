@@ -15,16 +15,16 @@
       <v-card-subtitle class="pa-2 px-1">
         <v-row>
           <v-col cols="auto">
-            <v-btn text class="text-capitalize">
-              <v-icon left size="24" color="green">mdi-bike</v-icon> Delivery
+            <v-btn text class="text-lowercase">
+              <v-icon left size="24" color="green">mdi-bike</v-icon> {{ element.delivery_price }} uzs
             </v-btn>
           </v-col>
           <v-col cols="auto">
             <v-divider vertical></v-divider>
           </v-col>
           <v-col cols="auto">
-            <v-btn text>
-              <v-icon left size="24" color="green">mdi-cash</v-icon> {{ element.price }} uzs
+            <v-btn text class="text-lowercase">
+              <v-icon left size="24" color="green">mdi-cash</v-icon> {{ getProductCost(element.products) }} uzs
             </v-btn>
           </v-col>
         </v-row>
@@ -35,7 +35,16 @@
 
 <script>
 export default {
-  props: ['status', 'query', 'element']
+  props: ['status', 'query', 'element'],
+  methods: {
+    getProductCost (list = []) {
+      if (!list) return 0
+      return list.reduce((acc, curr) => {
+        acc = acc + curr.price
+        return acc
+      }, 0)
+    }
+  }
 }
 </script>
 

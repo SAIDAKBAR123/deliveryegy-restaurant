@@ -9,7 +9,7 @@
       <v-row align="center" justify="space-between">
         <v-col cols="auto">
           <label for="">Courier</label>
-          <p>Saidakbar Makhmudkhujaev</p>
+          <p>{{ courierName(order) }}</p>
         </v-col>
         <v-col cols="auto">
           <svg
@@ -110,6 +110,15 @@ export default {
     }
   },
   methods: {
+    courierName (item) {
+      if (!item.courier_id) {
+        return 'No courier assigned yet'
+      } else {
+        Vendor.getCourier(item.courier_id).then(res => {
+          console.log(res)
+        })
+      }
+    },
     orderPrice (list = []) {
       return list.reduce((acc, curr) => {
         acc = acc + curr.price

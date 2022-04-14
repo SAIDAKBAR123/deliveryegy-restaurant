@@ -9,6 +9,7 @@ const req = {
   loginVendor: (data) => request({ method: 'post', url: '/vendor-user/login', data }),
   getOrderList: (params) => request({ method: 'get', url: '/order/list', params }),
   getOrderById: (id) => request({ method: 'get', url: '/order/get/' + id }),
-  updateOrder: (data) => request({ method: 'put', url: '/order/update', data })
+  updateOrder: (data) => request({ method: 'put', url: '/order/update', data }),
+  getCourier: (id) => request({ method: 'get', url: '/courier/get/' + id })
 }
 export default req
