@@ -157,7 +157,7 @@ export default {
         delivery_type: this.order.delivery_type,
         guid: this.order.guid,
         payment_type: this.order.payment_type,
-        product_id: this.order.products.map(el => el.id),
+        products: this.order.products.map(el => ({ product_id: el.id, count: el.count })),
         status,
         user_id: this.order.user_id
       }
